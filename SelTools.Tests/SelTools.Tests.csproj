@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>SelTools.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+    <PackageReference Include="JetBrains.dotCover.MSBuild"/>
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="xunit.runner.visualstudio"/>
+    <PackageReference Include="xunit"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SelTools\SelTools.csproj"/>
+  </ItemGroup>
+
+</Project>

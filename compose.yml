@@ -1,0 +1,48 @@
+services:
+  pgsql_db:
+    image: docker.io/library/postgres:16-trixie
+    environment:
+      POSTGRES_DB: integratedtest
+      POSTGRES_USER: integratedtest
+      POSTGRES_PASSWORD: integratedtest
+    restart: "no"
+    ports:
+      - "5432:5432"
+    networks:
+      - internal
+  mysql_db:
+    image: docker.io/library/mariadb:12-noble
+    environment:
+      MYSQL_ROOT_PASSWORD: integratedtest
+      MYSQL_DATABASE: integratedtest
+      MYSQL_USER: integratedtest
+      MYSQL_PASSWORD: integratedtest
+    restart: "no"
+    ports:
+      - "3306:3306"
+    networks:
+      - internal
+  tests:
+    image: localhost/seltools-tests:latest
+    build:
+      context: .
+      dockerfile: container/Containerfile
+    restart: "no"
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+        read_only: true
+      - type: bind
+        source: ./artifacts
+        target: /app/artifacts
+        read_only: false
+    depends_on:
+      - pgsql_db
+      - mysql_db
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge

@@ -1,0 +1,10 @@
+#FROM mcr.microsoft.com/dotnet/sdk:10.0.100-preview.7-noble
+FROM mcr.microsoft.com/dotnet/sdk:8.0-noble
+
+ADD . /app/
+
+RUN chmod +x /app/container/entrypoint.sh
+
+WORKDIR /app
+
+ENTRYPOINT ["/app/container/entrypoint.sh"]
