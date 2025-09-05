@@ -75,4 +75,21 @@ public class StringExtensionsTests
     [Fact]
     public void ValidateEnumParsing2()
         => Assert.Throws<InvalidCastException>(() => "asdf".ParseAsEnum<StringExtensionsTests>());
+
+    [Theory]
+    [InlineData("a b c", new[] {"a", "b", "c"})]
+    [InlineData("a  b c", new[] {"a", "b", "c"})]
+    [InlineData(" a  b c ", new[] {"a", "b", "c"})]
+    [InlineData(" a 'b c' d", new[] {"a", "b c", "d"})]
+    [InlineData(" a \"b c\" d", new[] {"a", "b c", "d"})]
+    [InlineData(" a 'b c\" d", new[] {"a", "'b", "c\"", "d"})]
+    [InlineData(" a \"b c' d", new[] {"a", "\"b", "c'", "d"})]
+    [InlineData("a '' b", new[] {"a", "", "b"})]
+    [InlineData("a '' b", new[] {"a", "b"}, true)]
+    [InlineData("a \"\" '' b", new[] {"a", "b"}, true)]
+    public void TestTokenization(string input, string[] expected, bool skipEmpties=false)
+    {
+        Assert.Equal(expected, input.ToQuotedTokens(skipEmpties).ToArray());
+    }
+
 }

@@ -93,6 +93,32 @@ public static partial class StringExtensions
         return stream;
     }
 
+    /// <summary>
+    /// Split a string by spaces, allow quoted values. Does not support escaping.
+    /// </summary>
+    /// <param name="str">The string to split.</param>
+    /// <param name="skipEmpty">Do not return empty elements.</param>
+    /// <returns>An IEnumerable of strings.</returns>
+    public static IEnumerable<string> ToQuotedTokens(this string str, bool skipEmpty = false)
+    {
+        foreach (Match token in TokenizeWithQuotesRegex().Matches(str))
+        {
+            // skip actual empties
+            if (skipEmpty && (token.Value == "\"\"" || token.Value == "''" || token.Value.Length == 0))
+            {
+                continue;
+            }
+
+            // strip the quotes if we had them
+            if ((token.ValueSpan[0] == '\'' && token.ValueSpan[^1] == '\'') || (token.ValueSpan[0] == '"' && token.ValueSpan[^1] == '"'))
+            {
+                yield return token.ValueSpan[1..^1].ToString();
+                continue;
+            }
+
+            yield return token.Value;
+        }
+    }
 
     /// <summary>
     /// Return a truncated (xor fold) sha256 hash of string. Do not use for cryptographic purposes.
@@ -128,6 +154,11 @@ public static partial class StringExtensions
 
         return result;
     }
+
+    [GeneratedRegex("""
+                    "(?:[^"]*)"|'(?:[^']*)'|[^\s]+
+                    """)]
+    private static partial Regex TokenizeWithQuotesRegex();
 
     [GeneratedRegex(@"([a-z0-9])([A-Z])")]
     private static partial Regex SnakeCaseReplacementRegex();
