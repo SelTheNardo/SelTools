@@ -92,4 +92,9 @@ public class StringExtensionsTests
         Assert.Equal(expected, input.ToQuotedTokens(skipEmpties).ToArray());
     }
 
+    [Fact]
+    public void TestTokenizationEmpty()
+    {
+        Assert.Empty("".ToQuotedTokens().ToArray());
+    }
 }
