@@ -6,7 +6,7 @@ using Npgsql;
 
 namespace SelTools.Database;
 
-public sealed class PgsqlDbFactory : IDbConnectionFactory
+public class PgsqlDbFactory : IDbConnectionFactory
 {
     private readonly string connectionString;
     private readonly string connectionName;

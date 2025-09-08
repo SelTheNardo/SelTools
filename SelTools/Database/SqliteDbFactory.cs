@@ -6,7 +6,7 @@ using Microsoft.Data.Sqlite;
 
 namespace SelTools.Database;
 
-public sealed class SqliteDbFactory : IDbConnectionFactory
+public class SqliteDbFactory : IDbConnectionFactory
 {
     private readonly string connectionString;
 

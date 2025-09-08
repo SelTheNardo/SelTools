@@ -6,7 +6,7 @@ using MySqlConnector;
 
 namespace SelTools.Database;
 
-public sealed class MysqlDbFactory : IDbConnectionFactory
+public class MysqlDbFactory : IDbConnectionFactory
 {
     private readonly string connectionString;
 

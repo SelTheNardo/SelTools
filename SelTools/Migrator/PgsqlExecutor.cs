@@ -7,7 +7,7 @@ using SelTools.Database;
 
 namespace SelTools.Migrator;
 
-public sealed class PgsqlExecutor : MigrationExecutorBase
+public class PgsqlExecutor : MigrationExecutorBase
 {
     [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase")]
     public static string GetDatabaseType => nameof(DatabaseType.Pgsql).ToLowerInvariant();
