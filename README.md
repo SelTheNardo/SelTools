@@ -16,3 +16,9 @@ No version/stability/anything is given, implied, or otherwise.
 # Contributions
 
 Issues, PRs, etc are not accepted and will be closed without comment.
+
+# AI Disclosure
+
+The author has avoided LLM usage for this project, with the following exceptions:
+
+* JetBrains [local model for code completion](https://www.jetbrains.com/help/rider/Full_Line_code_completion.html)
