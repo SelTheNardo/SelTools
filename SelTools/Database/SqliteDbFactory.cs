@@ -8,13 +8,15 @@ using Microsoft.Data.Sqlite;
 public class SqliteDbFactory : IDbConnectionFactory
 {
     private readonly string connectionString;
+    private readonly bool disableForeignKeys;
 
     public string GetDatabaseType() => nameof(DatabaseType.Sqlite);
 
-    public SqliteDbFactory(string connectionString)
+    public SqliteDbFactory(string connectionString, bool disableForeignKeys = false)
     {
         ArgumentException.ThrowIfNullOrEmpty(connectionString);
         this.connectionString = connectionString;
+        this.disableForeignKeys = disableForeignKeys;
     }
 
     public void Use(Action<IDbConnection> action)
@@ -49,6 +51,13 @@ public class SqliteDbFactory : IDbConnectionFactory
     {
         var connection = new SqliteConnection(this.connectionString);
         connection.Open();
+        if (disableForeignKeys)
+        {
+            return connection;
+        }
+
+        using var command = new SqliteCommand("PRAGMA foreign_keys = ON", connection);
+        command.ExecuteNonQuery();
         return connection;
     }
 
@@ -56,6 +65,13 @@ public class SqliteDbFactory : IDbConnectionFactory
     {
         var connection = new SqliteConnection(this.connectionString);
         await connection.OpenAsync();
+        if (disableForeignKeys)
+        {
+            return connection;
+        }
+
+        await using var command = new SqliteCommand("PRAGMA foreign_keys = ON", connection);
+        await command.ExecuteNonQueryAsync();
         return connection;
     }
 }
