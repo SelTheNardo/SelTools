@@ -6,6 +6,6 @@ public static class ObjectExtensions
 {
     public static void ThrowIfNull<T>(this T obj, string param)
     {
-        ArgumentNullException.ThrowIfNull(obj);
+        ArgumentNullException.ThrowIfNull(obj, param);
     }
 }
