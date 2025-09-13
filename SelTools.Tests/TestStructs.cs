@@ -1,14 +1,18 @@
 // SPDX-License-Identifier: CC0-1.0
 
-using SelTools.Serialization.Structs;
-
 namespace SelTools.Tests;
 
+using SelTools.Serialization.Structs;
+
+// ReSharper disable UnusedMember.Global
+// ReSharper disable BuiltInTypeReferenceStyle
+#pragma warning disable CS0414 // Field is assigned but its value is never used
+
 [StructTools(Size = 8)]
-struct Valid
+internal struct Valid
 {
     [SerializeField(Offset = 0, Length = 3)]
-    public byte[] ThreeByteArray = new byte[] {0x01, 0x02, 0x03};
+    public byte[] ThreeByteArray = new byte[] { 0x01, 0x02, 0x03 };
 
     [SerializeField(Offset = 3, Length = 2)]
     public UInt16 TwoBytesUShort1 = 0x0504;
@@ -25,10 +29,10 @@ struct Valid
 }
 
 [StructTools(Size = 8)]
-struct InvalidLengthMismatch
+internal struct InvalidLengthMismatch
 {
     [SerializeField(Offset = 0, Length = 3)]
-    public byte[] ThreeByteArray = new byte[] {0x01, 0x02, 0x03};
+    public byte[] ThreeByteArray = new byte[] { 0x01, 0x02, 0x03 };
 
     [SerializeField(Offset = 3, Length = 2)]
     public UInt16 TypeBytesUShort1 = 0x0504;
@@ -41,10 +45,10 @@ struct InvalidLengthMismatch
     }
 }
 
-struct InvalidMissingStructToolsAttribute
+internal struct InvalidMissingStructToolsAttribute
 {
     [SerializeField(Offset = 0, Length = 3)]
-    public byte[] ThreeByteArray = new byte[] {0x01, 0x02, 0x03};
+    public byte[] ThreeByteArray = new byte[] { 0x01, 0x02, 0x03 };
 
     [SerializeField(Offset = 3, Length = 2)]
     public UInt16 TwoBytesUShort1 = 0x0504;
@@ -58,10 +62,10 @@ struct InvalidMissingStructToolsAttribute
 }
 
 [StructTools(Size = 7)]
-struct ValidMissingSerializeFieldAttribute
+internal struct ValidMissingSerializeFieldAttribute
 {
     [SerializeField(Offset = 0, Length = 3)]
-    public byte[] ThreeByteArrayOfBytes = new byte[] {0x01, 0x02, 0x03};
+    public byte[] ThreeByteArrayOfBytes = new byte[] { 0x01, 0x02, 0x03 };
 
     [SerializeField(Offset = 3, Length = 2)]
     public UInt16 TwoByteUshort1 = 0x0504;
@@ -77,10 +81,10 @@ struct ValidMissingSerializeFieldAttribute
 }
 
 [StructTools(Size = 7)]
-struct InvalidFieldOffset
+internal struct InvalidFieldOffset
 {
     [SerializeField(Offset = 0, Length = 7)]
-    public byte[] ThreeByteArrayOfBytes = new byte[] {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
+    public byte[] ThreeByteArrayOfBytes = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07 };
 
     [SerializeField(Offset = 8, Length = 2)]
     public UInt16 TwoByteUshort = 0x0706;
@@ -90,12 +94,11 @@ struct InvalidFieldOffset
     }
 }
 
-
 [StructTools(Size = 31)]
-struct ValidAllSupportedTypes
+internal struct ValidAllSupportedTypes
 {
     [SerializeField(Offset = 0, Length = 1)]
-    public byte[] ByteArray = new byte[] {0x01};
+    public byte[] ByteArray = new byte[] { 0x01 };
 
     [SerializeField(Offset = 1, Length = 1)]
     public byte SingleByte = 0x02;
@@ -127,10 +130,10 @@ struct ValidAllSupportedTypes
 }
 
 [StructTools(Size = 32)]
-struct InvalidUnsupportedType
+internal struct InvalidUnsupportedType
 {
     [SerializeField(Offset = 0, Length = 1)]
-    public byte[] ByteArray = new byte[] {0x01};
+    public byte[] ByteArray = new byte[] { 0x01 };
 
     [SerializeField(Offset = 1, Length = 1)]
     public byte SingleByte = 0x02;

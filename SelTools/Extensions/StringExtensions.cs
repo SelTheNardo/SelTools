@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: CC0-1.0
 
+namespace SelTools.Extensions;
+
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-
-namespace SelTools.Extensions;
 
 [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase")]
 public static partial class StringExtensions
@@ -110,7 +110,8 @@ public static partial class StringExtensions
             }
 
             // strip the quotes if we had them
-            if ((token.ValueSpan[0] == '\'' && token.ValueSpan[^1] == '\'') || (token.ValueSpan[0] == '"' && token.ValueSpan[^1] == '"'))
+            if ((token.ValueSpan[0] == '\'' && token.ValueSpan[^1] == '\'') ||
+                (token.ValueSpan[0] == '"' && token.ValueSpan[^1] == '"'))
             {
                 yield return token.ValueSpan[1..^1].ToString();
                 continue;

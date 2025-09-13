@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: CC0-1.0
 
-using Dapper;
+namespace SelTools.Migrator;
 
+using Dapper;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using SelTools.Database;
-
-namespace SelTools.Migrator;
 
 public class SqliteExecutor : MigrationExecutorBase
 {

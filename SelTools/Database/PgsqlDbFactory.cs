@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: CC0-1.0
 
-using System.Data;
-
-using Npgsql;
-
 namespace SelTools.Database;
+
+using System.Data;
+using Npgsql;
 
 public class PgsqlDbFactory : IDbConnectionFactory
 {
@@ -18,7 +17,7 @@ public class PgsqlDbFactory : IDbConnectionFactory
         ArgumentException.ThrowIfNullOrEmpty(connectionString);
 
         this.connectionString = connectionString;
-        this.connectionName   = connectionName ?? "Unknown Application";
+        this.connectionName = connectionName ?? "Unknown Application";
     }
 
     public void Use(Action<IDbConnection> action)

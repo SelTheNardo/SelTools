@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: CC0-1.0
 
-using System.Data;
-
-using Microsoft.Data.Sqlite;
-
 namespace SelTools.Database;
+
+using System.Data;
+using Microsoft.Data.Sqlite;
 
 public class SqliteDbFactory : IDbConnectionFactory
 {

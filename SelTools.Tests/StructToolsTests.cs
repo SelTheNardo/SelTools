@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: CC0-1.0
 
+namespace SelTools.Tests;
+
 using System.ComponentModel.DataAnnotations;
 using SelTools.Serialization.Structs;
 using Xunit;
-
-namespace SelTools.Tests;
 
 public class StructToolsTests
 {
@@ -80,14 +80,12 @@ public class StructToolsTests
     [Fact]
     public void SerializeAnUnsupportedType()
     {
-        Assert.Throws<InvalidCastException>(
-            () => StructTools.Serialize(new InvalidUnsupportedType()));
+        Assert.Throws<InvalidCastException>(() => StructTools.Serialize(new InvalidUnsupportedType()));
     }
 
     [Fact]
     public void SerializeBrokenStruct()
     {
-        Assert.Throws<ValidationException>(
-            () => StructTools.Serialize(new InvalidFieldOffset()));
+        Assert.Throws<ValidationException>(() => StructTools.Serialize(new InvalidFieldOffset()));
     }
 }

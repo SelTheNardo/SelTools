@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: CC0-1.0
 
+namespace SelTools.Migrator;
+
 using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
-
-namespace SelTools.Migrator;
 
 public abstract partial class MigrationExecutorBase
 {
@@ -70,19 +70,19 @@ public abstract partial class MigrationExecutorBase
         {
             allPaths =
                 Directory.EnumerateFiles(currentPath)
-                         .Where(fn => fn.EndsWith(".SQL", StringComparison.OrdinalIgnoreCase))
-                         .Select(fn => new Migration()
-                          {
-                              Version = StartsWithNumbersRegex().IsMatch(Path.GetFileName(fn))
-                                  ? long.Parse(Path.GetFileName(fn).Split('_').FirstOrDefault() ?? "-1", NumberStyles.Integer,
-                                      CultureInfo.InvariantCulture)
-                                  : -1,
-                              Name = Path.GetFileName(fn),
-                              Path = fn,
-                              IsRepeatable = true,
-                          })
-                         .OrderBy(m => m.Version)
-                         .ToList();
+                    .Where(fn => fn.EndsWith(".SQL", StringComparison.OrdinalIgnoreCase))
+                    .Select(fn => new Migration()
+                    {
+                        Version = StartsWithNumbersRegex().IsMatch(Path.GetFileName(fn))
+                            ? long.Parse(Path.GetFileName(fn).Split('_').FirstOrDefault() ?? "-1", NumberStyles.Integer,
+                                CultureInfo.InvariantCulture)
+                            : -1,
+                        Name = Path.GetFileName(fn),
+                        Path = fn,
+                        IsRepeatable = true,
+                    })
+                    .OrderBy(m => m.Version)
+                    .ToList();
         }
 
         currentPath = Path.Combine(basePath, "sequential");
@@ -90,20 +90,20 @@ public abstract partial class MigrationExecutorBase
         {
             allPaths.AddRange(
                 Directory.EnumerateFiles(currentPath)
-                         .Where(fn => fn.EndsWith(".SQL", StringComparison.OrdinalIgnoreCase))
-                         .Select(fn => new Migration()
-                          {
-                              Version = long.Parse(
-                                  Path.GetFileName(fn).Split('_').FirstOrDefault() ?? throw new FormatException(
-                                      "Sequential migration filename does not meet expected naming convention (yyyymmddhhmmss_description-here.sql)."),
-                                  NumberStyles.Integer, CultureInfo.InvariantCulture),
-                              Name = Path.GetFileName(Path.GetFileName(fn)),
-                              Path = fn,
-                              IsRepeatable = false,
-                          })
-                         .Where(m => m.Version > currentVersion)
-                         .OrderBy(m => m.Version)
-                         .ToList()
+                    .Where(fn => fn.EndsWith(".SQL", StringComparison.OrdinalIgnoreCase))
+                    .Select(fn => new Migration()
+                    {
+                        Version = long.Parse(
+                            Path.GetFileName(fn).Split('_').FirstOrDefault() ?? throw new FormatException(
+                                "Sequential migration filename does not meet expected naming convention (yyyymmddhhmmss_description-here.sql)."),
+                            NumberStyles.Integer, CultureInfo.InvariantCulture),
+                        Name = Path.GetFileName(Path.GetFileName(fn)),
+                        Path = fn,
+                        IsRepeatable = false,
+                    })
+                    .Where(m => m.Version > currentVersion)
+                    .OrderBy(m => m.Version)
+                    .ToList()
             );
         }
 
@@ -112,23 +112,24 @@ public abstract partial class MigrationExecutorBase
         {
             allPaths.AddRange(
                 Directory.EnumerateFiles(currentPath)
-                         .Where(fn => fn.EndsWith(".SQL", StringComparison.OrdinalIgnoreCase))
-                         .Select(fn => new Migration()
-                          {
-                              Version = StartsWithNumbersRegex().IsMatch(Path.GetFileName(fn))
-                                  ? long.Parse(Path.GetFileName(fn).Split('_').FirstOrDefault() ?? "-1", NumberStyles.Integer,
-                                      CultureInfo.InvariantCulture)
-                                  : -1,
-                              Name = Path.GetFileName(fn),
-                              Path = fn,
-                              IsRepeatable = true,
-                          })
-                         .OrderBy(m => m.Version)
-                         .ToList()
+                    .Where(fn => fn.EndsWith(".SQL", StringComparison.OrdinalIgnoreCase))
+                    .Select(fn => new Migration()
+                    {
+                        Version = StartsWithNumbersRegex().IsMatch(Path.GetFileName(fn))
+                            ? long.Parse(Path.GetFileName(fn).Split('_').FirstOrDefault() ?? "-1", NumberStyles.Integer,
+                                CultureInfo.InvariantCulture)
+                            : -1,
+                        Name = Path.GetFileName(fn),
+                        Path = fn,
+                        IsRepeatable = true,
+                    })
+                    .OrderBy(m => m.Version)
+                    .ToList()
             );
         }
 
-        var badMigrations = allPaths.Where(m => !m.IsRepeatable && (m.Version < 20000000000000) | (m.Version > 99999999999999)).ToList();
+        var badMigrations = allPaths
+            .Where(m => !m.IsRepeatable && (m.Version < 20000000000000) | (m.Version > 99999999999999)).ToList();
         if (badMigrations.Count != 0)
         {
             var err = badMigrations.Aggregate("Incorrectly named migrations found:\n",

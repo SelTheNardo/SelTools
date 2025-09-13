@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: CC0-1.0
 
-using System.Text;
-
 namespace SelTools.Serialization.Structs;
+
+using System.Text;
 
 internal sealed class BinaryWriterBigEndian : BinaryWriter
 {

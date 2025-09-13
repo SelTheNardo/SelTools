@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: CC0-1.0
 
+namespace SelTools.Migrator;
+
 using Dapper;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using SelTools.Database;
-
-namespace SelTools.Migrator;
 
 public class PgsqlExecutor : MigrationExecutorBase
 {

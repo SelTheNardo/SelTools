@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: CC0-1.0
 
+namespace SelTools.Tests.Migrations;
+
 using System.CommandLine;
 using System.Diagnostics;
 using System.Text.Json;
 using SelTools.Database;
 using SelTools.Migrator;
-
-namespace SelTools.Tests.Migrations;
 
 public static class Program
 {
@@ -49,9 +49,12 @@ public static class Program
         {
             return parseResult.GetRequiredValue(dbTypeArg).ToUpperInvariant() switch
             {
-                "PGSQL" => await DoPgsql(parseResult.GetRequiredValue(migrationBase), parseResult.GetRequiredValue(connStringArg), token),
-                "MYSQL" => await DoMysql(parseResult.GetRequiredValue(migrationBase), parseResult.GetRequiredValue(connStringArg), token),
-                "SQLITE" => await DoSqlite(parseResult.GetRequiredValue(migrationBase), parseResult.GetRequiredValue(connStringArg), token),
+                "PGSQL" => await DoPgsql(parseResult.GetRequiredValue(migrationBase),
+                    parseResult.GetRequiredValue(connStringArg), token),
+                "MYSQL" => await DoMysql(parseResult.GetRequiredValue(migrationBase),
+                    parseResult.GetRequiredValue(connStringArg), token),
+                "SQLITE" => await DoSqlite(parseResult.GetRequiredValue(migrationBase),
+                    parseResult.GetRequiredValue(connStringArg), token),
                 _ => throw new UnreachableException()
             };
         });

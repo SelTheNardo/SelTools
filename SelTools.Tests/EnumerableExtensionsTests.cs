@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: CC0-1.0
 
+namespace SelTools.Tests;
+
 using System.Diagnostics.CodeAnalysis;
 using SelTools.Extensions;
 using Xunit;
-
-namespace SelTools.Tests;
 
 public class EnumerableExtensionsTests
 {
@@ -72,27 +72,30 @@ public class EnumerableExtensionsTests
     [Fact]
     public void ValidateSplitList()
     {
-        List<char> input = [
+        List<char> input =
+        [
             'a', 'b', 'c', 'd',
             'e', 'f', 'g', 'h',
             'i', 'j', 'k', 'l',
             'm', 'n'
         ];
 
-        List<List<char>> expected = [
+        List<List<char>> expected =
+        [
             ['a', 'b', 'c', 'd'],
             ['e', 'f', 'g', 'h'],
             ['i', 'j', 'k', 'l'],
             ['m', 'n']
         ];
-        List<List<char>> expected2 = [
+        List<List<char>> expected2 =
+        [
             ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
             ['h', 'i', 'j', 'k', 'l', 'm', 'n'],
         ];
 
         var actual = input.AsReadOnly().SplitListBy(4).ToList();
         var actual2 = input.AsReadOnly().SplitListBy(7).ToList();
-        
+
         Assert.Equal(expected, actual);
         Assert.Equal(expected2, actual2);
     }

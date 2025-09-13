@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: CC0-1.0
 
-using System.Data;
-
-using MySqlConnector;
-
 namespace SelTools.Database;
+
+using System.Data;
+using MySqlConnector;
 
 public class MysqlDbFactory : IDbConnectionFactory
 {
