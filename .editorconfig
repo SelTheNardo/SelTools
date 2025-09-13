@@ -37,6 +37,6 @@ dotnet_diagnostic.CA1062.severity = none
 dotnet_diagnostic.CA1873.severity = none
 
 # IDE0305: Use collection expression
-dotnet_diagnostic.IDE0305.severity = false:none
+dotnet_diagnostic.IDE0305.severity = none
 
 dotnet_style_prefer_collection_expression = false:none
