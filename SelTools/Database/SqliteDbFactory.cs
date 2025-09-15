@@ -8,15 +8,17 @@ using Microsoft.Data.Sqlite;
 public class SqliteDbFactory : IDbConnectionFactory
 {
     private readonly string connectionString;
-    private readonly bool disableForeignKeys;
 
     public string GetDatabaseType() => nameof(DatabaseType.Sqlite);
 
-    public SqliteDbFactory(string connectionString, bool disableForeignKeys = false)
+    public SqliteDbFactory(string connectionString)
     {
         ArgumentException.ThrowIfNullOrEmpty(connectionString);
-        this.connectionString = connectionString;
-        this.disableForeignKeys = disableForeignKeys;
+        var builder = new SqliteConnectionStringBuilder(connectionString)
+        {
+            ForeignKeys = true
+        };
+        this.connectionString = builder.ToString();
     }
 
     public void Use(Action<IDbConnection> action)
@@ -26,11 +28,11 @@ public class SqliteDbFactory : IDbConnectionFactory
         action.Invoke(connection);
     }
 
-    public async Task UseAsync(Func<IDbConnection, Task> action)
+    public async Task UseAsync(Func<IDbConnection, CancellationToken, Task> action, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
         await using var connection = await this.CreateAndOpenAsync();
-        await action.Invoke(connection);
+        await action.Invoke(connection, cancellationToken);
     }
 
     public T Use<T>(Func<IDbConnection, T> action)
@@ -40,24 +42,17 @@ public class SqliteDbFactory : IDbConnectionFactory
         return action.Invoke(connection);
     }
 
-    public async Task<T> UseAsync<T>(Func<IDbConnection, Task<T>> action)
+    public async Task<T> UseAsync<T>(Func<IDbConnection, CancellationToken, Task<T>> action, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
         await using var connection = await this.CreateAndOpenAsync();
-        return await action.Invoke(connection);
+        return await action.Invoke(connection, cancellationToken);
     }
 
     private SqliteConnection CreateAndOpen()
     {
         var connection = new SqliteConnection(this.connectionString);
         connection.Open();
-        if (disableForeignKeys)
-        {
-            return connection;
-        }
-
-        using var command = new SqliteCommand("PRAGMA foreign_keys = ON", connection);
-        command.ExecuteNonQuery();
         return connection;
     }
 
@@ -65,13 +60,6 @@ public class SqliteDbFactory : IDbConnectionFactory
     {
         var connection = new SqliteConnection(this.connectionString);
         await connection.OpenAsync();
-        if (disableForeignKeys)
-        {
-            return connection;
-        }
-
-        await using var command = new SqliteCommand("PRAGMA foreign_keys = ON", connection);
-        await command.ExecuteNonQueryAsync();
         return connection;
     }
 }

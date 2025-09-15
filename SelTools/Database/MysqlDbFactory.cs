@@ -24,11 +24,11 @@ public class MysqlDbFactory : IDbConnectionFactory
         action.Invoke(connection);
     }
 
-    public async Task UseAsync(Func<IDbConnection, Task> action)
+    public async Task UseAsync(Func<IDbConnection, CancellationToken, Task> action, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
         await using var connection = await this.CreateAndOpenAsync();
-        await action.Invoke(connection);
+        await action.Invoke(connection, cancellationToken);
     }
 
     public T Use<T>(Func<IDbConnection, T> action)
@@ -38,11 +38,11 @@ public class MysqlDbFactory : IDbConnectionFactory
         return action.Invoke(connection);
     }
 
-    public async Task<T> UseAsync<T>(Func<IDbConnection, Task<T>> action)
+    public async Task<T> UseAsync<T>(Func<IDbConnection, CancellationToken, Task<T>> action, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
         await using var connection = await this.CreateAndOpenAsync();
-        return await action.Invoke(connection);
+        return await action.Invoke(connection, cancellationToken);
     }
 
     private MySqlConnection CreateAndOpen()
