@@ -17,6 +17,7 @@ public class MysqlDbFactory : IDbConnectionFactory
         this.connectionString = connectionString;
     }
 
+    /// <inheritdoc/>
     public void Use(Action<IDbConnection> action)
     {
         ArgumentNullException.ThrowIfNull(action);
@@ -24,13 +25,16 @@ public class MysqlDbFactory : IDbConnectionFactory
         action.Invoke(connection);
     }
 
-    public async Task UseAsync(Func<IDbConnection, CancellationToken, Task> action, CancellationToken cancellationToken = default)
+    /// <inheritdoc/>
+    public async Task UseAsync(Func<IDbConnection, CancellationToken, Task> action,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
-        await using var connection = await this.CreateAndOpenAsync();
+        using var connection = await this.CreateAndOpenAsync();
         await action.Invoke(connection, cancellationToken);
     }
 
+    /// <inheritdoc/>
     public T Use<T>(Func<IDbConnection, T> action)
     {
         ArgumentNullException.ThrowIfNull(action);
@@ -38,21 +42,25 @@ public class MysqlDbFactory : IDbConnectionFactory
         return action.Invoke(connection);
     }
 
-    public async Task<T> UseAsync<T>(Func<IDbConnection, CancellationToken, Task<T>> action, CancellationToken cancellationToken = default)
+    /// <inheritdoc/>
+    public async Task<T> UseAsync<T>(Func<IDbConnection, CancellationToken, Task<T>> action,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
-        await using var connection = await this.CreateAndOpenAsync();
+        using var connection = await this.CreateAndOpenAsync();
         return await action.Invoke(connection, cancellationToken);
     }
 
-    private MySqlConnection CreateAndOpen()
+    /// <inheritdoc/>
+    public IDbConnection CreateAndOpen()
     {
         var connection = new MySqlConnection(this.connectionString);
         connection.Open();
         return connection;
     }
 
-    private async Task<MySqlConnection> CreateAndOpenAsync()
+    /// <inheritdoc/>
+    public async Task<IDbConnection> CreateAndOpenAsync()
     {
         var connection = new MySqlConnection(this.connectionString);
         await connection.OpenAsync();

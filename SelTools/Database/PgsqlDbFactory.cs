@@ -10,6 +10,7 @@ public class PgsqlDbFactory : IDbConnectionFactory
     private readonly string connectionString;
     private readonly string connectionName;
 
+    /// <inheritdoc/>
     public string GetDatabaseType() => nameof(DatabaseType.Pgsql);
 
     public PgsqlDbFactory(string connectionString, string? connectionName)
@@ -20,6 +21,7 @@ public class PgsqlDbFactory : IDbConnectionFactory
         this.connectionName = connectionName ?? "Unknown Application";
     }
 
+    /// <inheritdoc/>
     public void Use(Action<IDbConnection> action)
     {
         ArgumentNullException.ThrowIfNull(action);
@@ -27,13 +29,15 @@ public class PgsqlDbFactory : IDbConnectionFactory
         action.Invoke(connection);
     }
 
+    /// <inheritdoc/>
     public async Task UseAsync(Func<IDbConnection, CancellationToken, Task> action, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
-        await using var connection = await this.CreateAndOpenAsync();
+        using var connection = await this.CreateAndOpenAsync();
         await action.Invoke(connection, cancellationToken);
     }
 
+    /// <inheritdoc/>
     public T Use<T>(Func<IDbConnection, T> action)
     {
         ArgumentNullException.ThrowIfNull(action);
@@ -41,14 +45,16 @@ public class PgsqlDbFactory : IDbConnectionFactory
         return action.Invoke(connection);
     }
 
+    /// <inheritdoc/>
     public async Task<T> UseAsync<T>(Func<IDbConnection, CancellationToken, Task<T>> action, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
-        await using var connection = await this.CreateAndOpenAsync();
+        using var connection = await this.CreateAndOpenAsync();
         return await action.Invoke(connection, cancellationToken);
     }
 
-    private NpgsqlConnection CreateAndOpen()
+    /// <inheritdoc/>
+    public IDbConnection CreateAndOpen()
     {
         var connection = new NpgsqlConnection(this.connectionString);
         connection.Open();
@@ -69,7 +75,8 @@ public class PgsqlDbFactory : IDbConnectionFactory
         return connection;
     }
 
-    private async Task<NpgsqlConnection> CreateAndOpenAsync()
+    /// <inheritdoc/>
+    public async Task<IDbConnection> CreateAndOpenAsync()
     {
         var connection = new NpgsqlConnection(this.connectionString);
         await connection.OpenAsync();

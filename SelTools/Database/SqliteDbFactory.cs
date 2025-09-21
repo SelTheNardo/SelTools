@@ -9,6 +9,7 @@ public class SqliteDbFactory : IDbConnectionFactory
 {
     private readonly string connectionString;
 
+    /// <inheritdoc/>
     public string GetDatabaseType() => nameof(DatabaseType.Sqlite);
 
     public SqliteDbFactory(string connectionString)
@@ -21,6 +22,7 @@ public class SqliteDbFactory : IDbConnectionFactory
         this.connectionString = builder.ToString();
     }
 
+    /// <inheritdoc/>
     public void Use(Action<IDbConnection> action)
     {
         ArgumentNullException.ThrowIfNull(action);
@@ -28,13 +30,16 @@ public class SqliteDbFactory : IDbConnectionFactory
         action.Invoke(connection);
     }
 
-    public async Task UseAsync(Func<IDbConnection, CancellationToken, Task> action, CancellationToken cancellationToken = default)
+    /// <inheritdoc/>
+    public async Task UseAsync(Func<IDbConnection, CancellationToken, Task> action,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
-        await using var connection = await this.CreateAndOpenAsync();
+        using var connection = await this.CreateAndOpenAsync();
         await action.Invoke(connection, cancellationToken);
     }
 
+    /// <inheritdoc/>
     public T Use<T>(Func<IDbConnection, T> action)
     {
         ArgumentNullException.ThrowIfNull(action);
@@ -42,21 +47,25 @@ public class SqliteDbFactory : IDbConnectionFactory
         return action.Invoke(connection);
     }
 
-    public async Task<T> UseAsync<T>(Func<IDbConnection, CancellationToken, Task<T>> action, CancellationToken cancellationToken = default)
+    /// <inheritdoc/>
+    public async Task<T> UseAsync<T>(Func<IDbConnection, CancellationToken, Task<T>> action,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
-        await using var connection = await this.CreateAndOpenAsync();
+        using var connection = await this.CreateAndOpenAsync();
         return await action.Invoke(connection, cancellationToken);
     }
 
-    private SqliteConnection CreateAndOpen()
+    /// <inheritdoc/>
+    public IDbConnection CreateAndOpen()
     {
         var connection = new SqliteConnection(this.connectionString);
         connection.Open();
         return connection;
     }
 
-    private async Task<SqliteConnection> CreateAndOpenAsync()
+    /// <inheritdoc/>
+    public async Task<IDbConnection> CreateAndOpenAsync()
     {
         var connection = new SqliteConnection(this.connectionString);
         await connection.OpenAsync();
