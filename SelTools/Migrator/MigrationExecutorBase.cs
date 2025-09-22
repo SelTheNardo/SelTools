@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: CC0-1.0
 
-namespace SelTools.Migrator;
-
 using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
+
+namespace SelTools.Migrator;
 
 public abstract partial class MigrationExecutorBase
 {

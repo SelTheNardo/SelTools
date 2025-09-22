@@ -5,6 +5,8 @@ namespace SelTools.Tests;
 using Xunit;
 using SelTools.Extensions;
 
+#pragma warning disable CA1861
+
 public class StringExtensionsTests
 {
     [Theory]

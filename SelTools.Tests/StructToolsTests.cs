@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: CC0-1.0
 
-namespace SelTools.Tests;
-
 using System.ComponentModel.DataAnnotations;
 using SelTools.Serialization.Structs;
 using Xunit;
+
+namespace SelTools.Tests;
 
 public class StructToolsTests
 {

@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: CC0-1.0
 
-namespace SelTools.Database;
-
 using System.Data;
 using Npgsql;
+
+namespace SelTools.Database;
 
 public class PgsqlDbFactory : IDbConnectionFactory
 {
     private readonly string connectionString;
-    private readonly string connectionName;
 
     /// <inheritdoc/>
     public string GetDatabaseType() => nameof(DatabaseType.Pgsql);
@@ -17,8 +16,9 @@ public class PgsqlDbFactory : IDbConnectionFactory
     {
         ArgumentException.ThrowIfNullOrEmpty(connectionString);
 
-        this.connectionString = connectionString;
-        this.connectionName = connectionName ?? "Unknown Application";
+        var builder = new NpgsqlConnectionStringBuilder(connectionString);
+        builder.ApplicationName ??= connectionName;
+        this.connectionString = builder.ConnectionString;
     }
 
     /// <inheritdoc/>
@@ -30,7 +30,8 @@ public class PgsqlDbFactory : IDbConnectionFactory
     }
 
     /// <inheritdoc/>
-    public async Task UseAsync(Func<IDbConnection, CancellationToken, Task> action, CancellationToken cancellationToken = default)
+    public async Task UseAsync(Func<IDbConnection, CancellationToken, Task> action,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
         using var connection = await this.CreateAndOpenAsync();
@@ -46,7 +47,8 @@ public class PgsqlDbFactory : IDbConnectionFactory
     }
 
     /// <inheritdoc/>
-    public async Task<T> UseAsync<T>(Func<IDbConnection, CancellationToken, Task<T>> action, CancellationToken cancellationToken = default)
+    public async Task<T> UseAsync<T>(Func<IDbConnection, CancellationToken, Task<T>> action,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(action);
         using var connection = await this.CreateAndOpenAsync();
@@ -58,20 +60,6 @@ public class PgsqlDbFactory : IDbConnectionFactory
     {
         var connection = new NpgsqlConnection(this.connectionString);
         connection.Open();
-
-        using var command = new NpgsqlCommand("SET application_name TO $1", connection);
-        command.Parameters.Add(new NpgsqlParameter { Value = this.connectionName });
-
-        try
-        {
-            command.ExecuteNonQuery();
-        }
-        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.AdminShutdown)
-        {
-            connection.Open();
-            command.ExecuteNonQuery();
-        }
-
         return connection;
     }
 
@@ -80,20 +68,6 @@ public class PgsqlDbFactory : IDbConnectionFactory
     {
         var connection = new NpgsqlConnection(this.connectionString);
         await connection.OpenAsync();
-
-        await using var command = new NpgsqlCommand("SET application_name TO $1", connection);
-        command.Parameters.Add(new NpgsqlParameter { Value = this.connectionName });
-
-        try
-        {
-            await command.ExecuteNonQueryAsync();
-        }
-        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.AdminShutdown)
-        {
-            await connection.OpenAsync();
-            await command.ExecuteNonQueryAsync();
-        }
-
         return connection;
     }
 }

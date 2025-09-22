@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: CC0-1.0
 
-using Microsoft.Data.Sqlite;
-using SelTools.Database;
-
 namespace SelTools.Tests;
 
+using Microsoft.Data.Sqlite;
+using SelTools.Database;
 using Xunit;
-using SelTools.Extensions;
 
 public class SqliteTests
 {

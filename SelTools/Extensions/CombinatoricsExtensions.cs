@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: CC-BY-SA-3.0
 // https://stackoverflow.com/a/32544916
 
-namespace SelTools.Extensions;
-
 using System.Diagnostics.CodeAnalysis;
+
+namespace SelTools.Extensions;
 
 [SuppressMessage("Performance", "CA1859: Use concrete types when possible for improved performance")]
 public static class CombinatoricsExtensions

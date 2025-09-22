@@ -38,7 +38,7 @@ $cmd mysql "/app/SelTools.Tests.Migrations/migrations" "${connstring}" \
   && test:pass "mysql migration 2" \
   || test:fail "mysql migration 2"
 
-connstring="Data Source=/app/database.sqlite;Version=3;"
+connstring="Data Source=/app/artifacts/database.sqlite"
 $cmd sqlite "/app/SelTools.Tests.Migrations/migrations" "${connstring}" \
   && test:pass "sqlite migration 1" \
   || test:fail "sqlite migration 1"

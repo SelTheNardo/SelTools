@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: CC0-1.0
 
-namespace SelTools.Tests;
-
 using SelTools.Extensions;
 using Xunit;
+
+namespace SelTools.Tests;
 
 public class NumericExtensionTests
 {

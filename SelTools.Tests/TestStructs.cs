@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: CC0-1.0
 
-namespace SelTools.Tests;
-
 using SelTools.Serialization.Structs;
+
+namespace SelTools.Tests;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable BuiltInTypeReferenceStyle

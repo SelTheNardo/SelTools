@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: CC0-1.0
 
-namespace SelTools.Tests.Migrations;
-
 using System.CommandLine;
 using System.Diagnostics;
 using System.Text.Json;
 using SelTools.Database;
 using SelTools.Migrator;
+
+namespace SelTools.Tests.Migrations;
 
 public static class Program
 {
@@ -73,7 +73,7 @@ public static class Program
         });
 
         await Console.Out.WriteLineAsync(JsonSerializer.Serialize(result, writeIndentedJsonSerializerOptions));
-        return result.CurrentDatabaseVersion == 20221029000000 ? 0 : 1;
+        return result.CurrentDatabaseVersion == 20221029000001 ? 0 : 1;
     }
 
     private static async Task<int> DoMysql(string migrationBase, string connString, CancellationToken token)
@@ -86,7 +86,7 @@ public static class Program
         });
 
         await Console.Out.WriteLineAsync(JsonSerializer.Serialize(result, writeIndentedJsonSerializerOptions));
-        return result.CurrentDatabaseVersion == 20221029000000 ? 0 : 1;
+        return result.CurrentDatabaseVersion == 20221029000001 ? 0 : 1;
     }
 
     private static async Task<int> DoSqlite(string migrationBase, string connString, CancellationToken token)
@@ -99,6 +99,6 @@ public static class Program
         });
 
         await Console.Out.WriteLineAsync(JsonSerializer.Serialize(result, writeIndentedJsonSerializerOptions));
-        return result.CurrentDatabaseVersion == 20221029000000 ? 0 : 1;
+        return result.CurrentDatabaseVersion == 20221029000001 ? 0 : 1;
     }
 }

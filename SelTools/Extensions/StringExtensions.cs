@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: CC0-1.0
 
-namespace SelTools.Extensions;
-
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+
+namespace SelTools.Extensions;
 
 [SuppressMessage("Globalization", "CA1308:Normalize strings to uppercase")]
 public static partial class StringExtensions

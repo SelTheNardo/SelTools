@@ -2,7 +2,6 @@
 
 namespace SelTools.Migrator;
 
-using Dapper;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using SelTools.Database;
@@ -16,28 +15,44 @@ public class SqliteExecutor : MigrationExecutorBase
     {
         ArgumentNullException.ThrowIfNull(connection);
 
-        var sql = """
-                  CREATE TABLE IF NOT EXISTS [migrations] (
-                      [version]   INTEGER,
-                      [performed] DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                      [name]      TEXT,
-                      CONSTRAINT migrations_pk PRIMARY KEY ([version], [name])
-                  )
-                  """;
-        connection.Execute(sql);
+        using var command = connection.CreateCommand();
+        command.CommandText =
+            """
+            CREATE TABLE IF NOT EXISTS [migrations] (
+                [version]   INTEGER,
+                [performed] DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                [name]      TEXT,
+                CONSTRAINT migrations_pk PRIMARY KEY ([version], [name])
+            )
+            """;
+        command.ExecuteNonQuery();
 
-        sql = "SELECT COALESCE(MAX(version), -1) AS [version] FROM [migrations];";
-        return connection.QuerySingle<long>(sql);
+        command.CommandText = "SELECT COALESCE(MAX(version), -1) AS [version] FROM [migrations];";
+        return (long)command.ExecuteScalar()!;
     }
 
     protected override void ExecuteMigration(IDbTransaction transaction, Migration migration)
     {
         ArgumentNullException.ThrowIfNull(transaction.Connection);
 
-        transaction.Connection.Execute(migration.Sql, transaction);
+        using var command = transaction.Connection.CreateCommand();
+        command.CommandText = migration.Sql;
+        command.Transaction = transaction;
+        command.ExecuteNonQuery();
 
-        const string sql = @"REPLACE INTO [migrations] ([version], [name]) VALUES (@version, @name);";
+        command.CommandText = @"REPLACE INTO [migrations] ([version], [name]) VALUES (@version, @name);";
+        var version = command.CreateParameter();
+        version.ParameterName = "version";
+        version.DbType = DbType.Int64;
+        version.Value = migration.Version;
 
-        transaction.Connection.Execute(sql, new { version = migration.Version, name = migration.Name }, transaction);
+        var name = command.CreateParameter();
+        name.ParameterName = "name";
+        name.DbType = DbType.String;
+        name.Value = migration.Name;
+
+        command.Parameters.Add(version);
+        command.Parameters.Add(name);
+        command.ExecuteNonQuery();
     }
 }

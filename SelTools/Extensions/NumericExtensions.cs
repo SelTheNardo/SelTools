@@ -4,8 +4,8 @@ namespace SelTools.Extensions;
 
 public static class NumericExtensions
 {
-    private static readonly string[] sizesBase10 = [ "B", "kB", "MB", "GB", "TB", "PB" ];
-    private static readonly string[] sizesBase2 = [ "B", "KiB", "MiB", "GiB", "TiB", "PiB" ];
+    private static readonly string[] sizesBase10 = ["B", "kB", "MB", "GB", "TB", "PB"];
+    private static readonly string[] sizesBase2 = ["B", "KiB", "MiB", "GiB", "TiB", "PiB"];
 
     public static string ToFriendlyStorageSize(this long size, bool useBase10 = false)
     {

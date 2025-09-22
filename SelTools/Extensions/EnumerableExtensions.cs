@@ -1,8 +1,8 @@
-namespace SelTools.Extensions;
-
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+
+namespace SelTools.Extensions;
 
 public static class EnumerableExtensions
 {

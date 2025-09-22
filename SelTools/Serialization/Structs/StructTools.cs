@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: CC0-1.0
 
-namespace SelTools.Serialization.Structs;
-
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+
+namespace SelTools.Serialization.Structs;
 
 public static class StructTools
 {
@@ -17,7 +17,8 @@ public static class StructTools
 
         using var ms = new MemoryStream();
 
-        var structAttr = (StructToolsAttribute)(obj.GetType().GetCustomAttributes(typeof(StructToolsAttribute)).First());
+        var structAttr =
+            (StructToolsAttribute)(obj.GetType().GetCustomAttributes(typeof(StructToolsAttribute)).First());
         using var writer = endianness == Endianness.LittleEndian
             ? new BinaryWriter(ms)
             : new BinaryWriterBigEndian(ms);
