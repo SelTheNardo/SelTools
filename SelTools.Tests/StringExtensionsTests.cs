@@ -58,7 +58,7 @@ public class StringExtensionsTests
     public void SnakeCaseConverter(string input, string expected)
         => Assert.Equal(expected, input.ToSnakeCase());
 
-    public enum Example
+    internal enum Example
     {
         Undefined,
         One,
@@ -70,7 +70,7 @@ public class StringExtensionsTests
     [InlineData("Undefined", Example.Undefined)]
     [InlineData("One", Example.One)]
     [InlineData("Two", Example.Two)]
-    public void ValidateEnumParsing(string input, Example expected)
+    internal void ValidateEnumParsing(string input, Example expected)
         => Assert.Equal(expected, input.ParseAsEnum<Example>());
 
     [Fact]

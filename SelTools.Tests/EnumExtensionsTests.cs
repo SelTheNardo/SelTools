@@ -28,9 +28,8 @@ public class EnumExtensionsTests
         Assert.Equal(expected, actual);
     }
 
-    [SuppressMessage("Design", "CA1028: Enum Storage should be Int32")]
     [Flags]
-    public enum TestEnumInt
+    internal enum TestEnumInt
     {
         None = 0,
         Flag1 = 1,
@@ -38,9 +37,8 @@ public class EnumExtensionsTests
         Flag3 = 4
     }
 
-    [SuppressMessage("Design", "CA1028: Enum Storage should be Int32")]
     [Flags]
-    public enum TestEnumLong : long
+    internal enum TestEnumLong : long
     {
         None = 0,
         Flag1 = 1,

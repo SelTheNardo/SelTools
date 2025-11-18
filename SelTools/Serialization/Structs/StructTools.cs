@@ -17,8 +17,7 @@ public static class StructTools
 
         using var ms = new MemoryStream();
 
-        var structAttr =
-            (StructToolsAttribute)(obj.GetType().GetCustomAttributes(typeof(StructToolsAttribute)).First());
+        var structAttr = obj.GetType().GetCustomAttributes<StructToolsAttribute>().First();
         using var writer = endianness == Endianness.LittleEndian
             ? new BinaryWriter(ms)
             : new BinaryWriterBigEndian(ms);
@@ -26,14 +25,13 @@ public static class StructTools
         var fields = obj
             .GetType()
             .GetFields()
-            .Where(f => f.GetCustomAttributes(typeof(SerializeFieldAttribute)).FirstOrDefault() is not null)
-            .OrderBy(f =>
-                ((SerializeFieldAttribute)f.GetCustomAttributes(typeof(SerializeFieldAttribute)).First()).Offset)
+            .Where(f => f.GetCustomAttributes<SerializeFieldAttribute>().FirstOrDefault() is not null)
+            .OrderBy(f => f.GetCustomAttributes<SerializeFieldAttribute>().First().Offset)
             .ToList();
 
         foreach (var field in fields)
         {
-            var fieldAttr = (SerializeFieldAttribute)field.GetCustomAttributes(typeof(SerializeFieldAttribute)).First();
+            var fieldAttr = field.GetCustomAttributes<SerializeFieldAttribute>().First();
 
             if (field.FieldType == typeof(byte))
             {
@@ -84,7 +82,7 @@ public static class StructTools
 
     public static int GetDeclaredSize(object obj)
     {
-        var attr = obj.GetType().GetCustomAttributes(typeof(StructToolsAttribute)).FirstOrDefault();
+        var attr = obj.GetType().GetCustomAttributes<StructToolsAttribute>().FirstOrDefault();
         if (attr is StructToolsAttribute casted)
         {
             return casted.Size;
@@ -98,7 +96,7 @@ public static class StructTools
     {
         var errors = new List<string>();
 
-        var structAttr = anything.GetType().GetCustomAttributes(typeof(StructToolsAttribute)).FirstOrDefault();
+        var structAttr = anything.GetType().GetCustomAttributes<StructToolsAttribute>().FirstOrDefault();
         if (structAttr is not StructToolsAttribute castedStructAttr)
         {
             errors.Add($"{anything.GetType()} has not been annotated with {nameof(StructToolsAttribute)}");
@@ -108,7 +106,7 @@ public static class StructTools
         var size = 0;
         foreach (var field in anything.GetType().GetFields())
         {
-            var fieldAttr = field.GetCustomAttributes(typeof(SerializeFieldAttribute)).FirstOrDefault();
+            var fieldAttr = field.GetCustomAttributes<SerializeFieldAttribute>().FirstOrDefault();
             if (fieldAttr is not SerializeFieldAttribute castedFieldAttr)
             {
                 continue;
