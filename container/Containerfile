@@ -1,5 +1,4 @@
-#FROM mcr.microsoft.com/dotnet/sdk:10.0.100-preview.7-noble
-FROM mcr.microsoft.com/dotnet/sdk:8.0-noble
+FROM mcr.microsoft.com/dotnet/sdk:10.0.100
 
 ADD . /app/
 

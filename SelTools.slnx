@@ -1,0 +1,10 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="SelTools.Tests.Migrations/SelTools.Tests.Migrations.csproj" />
+  <Project Path="SelTools.Tests/SelTools.Tests.csproj" />
+  <Project Path="SelTools/SelTools.csproj" />
+</Solution>

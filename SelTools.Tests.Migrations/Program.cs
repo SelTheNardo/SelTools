@@ -8,7 +8,7 @@ using SelTools.Migrator;
 
 namespace SelTools.Tests.Migrations;
 
-public static class Program
+internal static class Program
 {
     private static readonly JsonSerializerOptions writeIndentedJsonSerializerOptions = new() { WriteIndented = true };
 
